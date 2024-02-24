@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>Birthday Slides Automation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <style>
+      html {
+        overflow: auto;
+      }
+
+      .hero {
+        background-image: radial-gradient(#a7a7a73b 7%, #ffffff00 0%), linear-gradient(#fdfdfd 0%, #fdfdfd 100%);
+        background-repeat: repeat, no-repeat;
+        background-size: 50px 50px, cover;
+      }
+
+      .box {
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px 0px #bfbfbf8c;
+      }
+
+      .box .button {
+        margin-top: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero is-fullheight">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns is-centered">
+            <div class="column is-5">
+              <div class="box content has-text-centered">
+                <h1 class="title <?= status ?>"><?= title ?></h1>
+                <p><?= message ?></p>
+                <a class="button is-fullwidth is-light" onclick="window.top.close()">
+                    <span>Close</span>
+                  </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
