@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>Birthday Slides Automation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <style>
+      html {
+        overflow: auto;
+      }
+
+      .hero {
+        background-image: radial-gradient(#a7a7a73b 7%, #ffffff00 0%), linear-gradient(#fdfdfd 0%, #fdfdfd 100%);
+        background-repeat: repeat, no-repeat;
+        background-size: 50px 50px, cover;
+      }
+
+      .box {
+        padding: 2rem;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px 0px #bfbfbf8c;
+      }
+
+      .box .button {
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+      } 
+
+      .link {
+        margin-top: 1rem;
+        overflow-wrap: anywhere;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero is-fullheight">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns is-centered">
+            <div class="column is-5">
+              <div class="box content has-text-centered">
+                <? if (!setup) { ?>
+                  <h1 class="title">Setup</h1>
+                  <p>To begin, link a Blackbaud account with the application</p>
+                  <a class="button is-fullwidth is-success is-light" href="<?= authorizationUrl ?>">
+                    <span class="icon">
+                      <img src="https://github.com/bootsie123/bg-group-sync/blob/main/src/public/blackbaud.png?raw=true" />
+                    </span>
+                    <span>Link to Blackbaud</span>
+                  </a>
+                <? } else { ?>
+                  <h1 class="title has-text-success">Setup already complete!</h1>
+                  <p>
+                    The application is already linked with a Blackbaud account. 
+                    However, you may refresh the application's Blackbaud credentials by relinking your account below
+                  </p>
+                  <a class="button is-fullwidth is-warning is-light" href="<?= authorizationUrl ?>">
+                    <span class="icon">
+                      <img src="https://github.com/bootsie123/bg-group-sync/blob/main/src/public/blackbaud.png?raw=true" />
+                    </span>
+                    <span>Relink to Blackbaud</span>
+                  </a>
+                <? } ?>
+                <p class="content is-small has-text-left">
+                  *Remember to add the following as a Redirect URI in your Blackbaud Application: <a class="link" href="<?= redirectUri ?>"><?= redirectUri ?></a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
