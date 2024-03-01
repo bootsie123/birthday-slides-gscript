@@ -45,9 +45,7 @@ function main() {
 
   let birthdays = getBirthdayList_();
   
-  // birthdays = birthdays.filter(birthday => birthday.dob.getDate() == date.getDate() && birthday.dob.getMonth() == date.getMonth());
-
-  birthdays = birthdays.filter(birthday => birthday.dob.getDate() == date.getDate());
+  birthdays = birthdays.filter(birthday => birthday.dob.getDate() == date.getDate() && birthday.dob.getMonth() == date.getMonth());
 
   console.log(`Birthday list retrieved! Found ${birthdays.length} birthdays...`);
 
@@ -74,7 +72,7 @@ function main() {
 
       console.log(`\tCreated - ${fullName} (${i + 1}/${birthdays.length})`);
     } catch (err) {
-      console.error(`\tFailed to create slide for ${fullName}! Skipping...`);
+      console.error(`\tFailed to create slide for ${fullName}! Skipping...`, err);
     }  
   }
 
