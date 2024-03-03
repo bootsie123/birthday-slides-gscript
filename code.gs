@@ -1,9 +1,33 @@
-const TEMPLATE_ID = "1pI4S8cyScSP8Qv3clX0QqwV-SnDptL-SC_B1HOK1BLA";
+const TEMPLATE_ID = "REPLACE_WITH_GOOGLE_SLIDE_ID";
 
-const BLACKBAUD_LIST = "142534";
+const BLACKBAUD_LIST = "REPLACE_WITH_BLACKBAUD_LIST_ID";
 
 const current = SlidesApp.getActivePresentation();
 const template = SlidesApp.openById(TEMPLATE_ID).getSlides()[0];
+
+/**
+ * Retrieves a list of bithdays from Blackbaud and populates the a Google Slide Show with
+ * the retrieved info using a given Google Slide template
+ */
+function main() {
+  console.log("Clearing existing slides...");
+
+  clearSlides_(); // Clear existing slides
+
+  console.log("Slides cleared!");
+
+  console.log("Getting birthday list...");
+
+  const birthdays = filterBirthdays_(getBirthdayList_()); // Filter bithday list
+
+  console.log(`Birthday list retrieved! Found ${birthdays.length} birthday(s)...`);
+
+  console.log("Generating slides...");
+
+  createSlides_(birthdays); // Create slides from template
+
+  console.log("Slides complete!");
+}
 
 /**
  * Clears all slides from the current slideshow
@@ -29,35 +53,50 @@ function toTitleCase_(text) {
 }
 
 /**
- * Retrieves a list of bithdays from Blackbaud and populates the a Google Slide Show with
- * the retrieved info using a given Google Slide template
+ * Filters an array of birthdays to only show the birthdays for today.
+ * For Fridays, the birthdays for the weekend are included.
+ * 
+ * @param {array} birthdays An array of birthdays to filter
+ * @return {array} A filtered array
  */
-function main() {
-  console.log("Clearing existing slides...");
+function filterBirthdays_(birthdays) {
+  const date = new Date();
 
-  clearSlides_(); // Clear existing slides
+  date.setHours(0, 0, 0, 0);
 
-  console.log("Slides cleared!");
+  const endDate = new Date(date);
 
-  const date = new Date(); // Get current date
+  if (date.getDay() == 5) {
+    endDate.setDate(endDate.getDate() + 2);
+  }
 
-  console.log("Getting birthday list...");
+  birthdays = birthdays.filter(birthday => {
+    const dob = new Date(birthday.dob);
 
-  let birthdays = getBirthdayList_();
-  
-  birthdays = birthdays.filter(birthday => birthday.dob.getDate() == date.getDate() && birthday.dob.getMonth() == date.getMonth());
+    dob.setFullYear(date.getFullYear());
 
-  console.log(`Birthday list retrieved! Found ${birthdays.length} birthdays...`);
+    return dob >= date && dob <= endDate;
+  });
 
-  console.log("Generating slides...");
+  return birthdays;
+}
 
+/**
+ * Creates a new slide for each birthday following the specified template
+ * 
+ * @param {array} birthdays An array of birthdays to generate slides for
+ */
+function createSlides_(birthdays) {
   for (let i = 0; i < birthdays.length; i++) {
     const birthday = birthdays[i];
 
     const fullName = toTitleCase_(`${birthday.firstName} ${birthday.lastName}`);
+    const dob = birthday.dob;
+
+    let slide;
 
     try {
-      const slide = current.appendSlide(template, SlidesApp.SlideLinkingMode.NOT_LINKED);
+      slide = current.appendSlide(template, SlidesApp.SlideLinkingMode.NOT_LINKED);
 
       const photos = getProfileImage_(birthday.userId);
 
@@ -67,16 +106,22 @@ function main() {
         image.replace("https:" + photos.large_filename_url, true);
       }
 
-      slide.replaceAllText("%name%", fullName);
+      slide.replaceAllText("%name%", `${fullName}, ${dob.getMonth()}/${dob.getDate()}`);
       slide.setSkipped(false);
 
       console.log(`\tCreated - ${fullName} (${i + 1}/${birthdays.length})`);
     } catch (err) {
       console.error(`\tFailed to create slide for ${fullName}! Skipping...`, err);
-    }  
-  }
 
-  console.log("Slides complete!");
+      if (slide) {
+        try {
+          slide.remove();
+        } catch (err) {
+          console.error(`\tFailed to cleanup slide...`, err);
+        }
+      }
+    }
+  }
 }
 
 /**
