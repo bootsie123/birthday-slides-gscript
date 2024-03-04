@@ -106,7 +106,7 @@ function createSlides_(birthdays) {
         image.replace("https:" + photos.large_filename_url, true);
       }
 
-      slide.replaceAllText("%name%", `${fullName}, ${dob.getMonth()}/${dob.getDate()}`);
+      slide.replaceAllText("%name%", `${fullName}, ${dob.getMonth() + 1}/${dob.getDate()}`);
       slide.setSkipped(false);
 
       console.log(`\tCreated - ${fullName} (${i + 1}/${birthdays.length})`);
